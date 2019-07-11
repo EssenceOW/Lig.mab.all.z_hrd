@@ -7,12 +7,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class GoreFast {
+public class Gorefast {
 
     private GoreState state;
     private static final int MOVEMENT = 100;
     private Rectangle bounds;
     private Animation currentAnimation;
+
     private Animation gorefastRunning;
     private Animation gorefastDeath;
     private Animation gorefastAttack;
@@ -31,6 +32,7 @@ public class GoreFast {
     public Vector2 getPosition() {
         return position;
     }
+
     public TextureRegion getTexture() {
         switch(state){
             case DIE:
@@ -48,19 +50,31 @@ public class GoreFast {
         return this.currentAnimation.getFrame();
     }
 
-    public GoreFast(int x, int y){
+
+
+    public Gorefast(int x, int y){
         position = new Vector2(x,y);
         collided = false;
         velocity = new Vector2(0,0);
-        texture = new Texture("Gorefast.png");
         state = GoreState.IDLE;
+        texture = new Texture("Gorefast.png");
 //        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
-        bounds = new Rectangle(position.x, position.y, texture.getWidth() / 3, texture.getHeight());
+        bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
+        gorefastAttack = new Animation(new TextureRegion(new Texture("Gorefast_attack.png")),16, 3f);
+        gorefastRunning = new Animation(new TextureRegion(new Texture("Gorefast_running.png")),4, 0.4f);
+        gorefastDeath = new Animation(new TextureRegion(new Texture("Gorefast_death.png")),20, 3f);
+
+    }
+
+    public void run(){
+        this.state = GoreState.RUNNING;
     }
 
     public void update(float dt){
-        currentAnimation.update(dt);
+        if (currentAnimation!=null){
+            currentAnimation.update(dt);
+        }
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }
@@ -83,9 +97,6 @@ public class GoreFast {
         bounds.setPosition(position.x, position.y);
     }
 
-
-
     public void dispose() {
-        texture.dispose();
     }
 }

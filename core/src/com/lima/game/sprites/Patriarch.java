@@ -2,13 +2,13 @@ package com.lima.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
 
-public class TheGuardian {
+public class Patriarch {
 
 
     private Texture TheGuardian;
 
 
-    public TheGuardian(){
+    public Patriarch(){
         TheGuardian = new Texture("Patriarch.png");
     }
 }

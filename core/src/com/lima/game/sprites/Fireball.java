@@ -1,4 +1,4 @@
 package com.lima.game.sprites;
 
-public class HuskiBoi {
+public class Fireball {
 }

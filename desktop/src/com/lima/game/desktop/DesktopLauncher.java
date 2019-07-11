@@ -7,6 +7,8 @@ import com.lima.game.blzhrd;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.width = blzhrd.WIDTH;
+		config.height = blzhrd.HEIGHT;
 		new LwjglApplication(new blzhrd(), config);
 	}
 }

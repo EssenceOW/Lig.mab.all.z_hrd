@@ -15,6 +15,7 @@ public class Husk {
     private Animation currentAnimation;
 
     private Animation huskWalking;
+    private Animation huskDeath;
     private Texture texture;
     private Vector2 position;
     private Vector2 velocity;
@@ -38,6 +39,9 @@ public class Husk {
                 break;
             default:
                 return new TextureRegion(texture);
+            case DEATH:
+                this.currentAnimation = huskDeath;
+                break;
         }
         return this.currentAnimation.getFrame();
     }
@@ -52,6 +56,7 @@ public class Husk {
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
         huskWalking = new Animation(new TextureRegion(new Texture("Husk_walking.png")),4, 0.3f);
+        huskDeath = new Animation(new TextureRegion(new Texture("Husk_death.png")),4, 0.3f);
 
     }
 

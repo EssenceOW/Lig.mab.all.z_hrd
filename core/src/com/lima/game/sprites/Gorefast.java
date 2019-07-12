@@ -61,14 +61,20 @@ public class Gorefast {
 //        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
-        gorefastAttack = new Animation(new TextureRegion(new Texture("Gorefast_attack.png")),16, 3f);
+        gorefastAttack = new Animation(new TextureRegion(new Texture("Gorefast_attack.png")),16, 0.6f);
         gorefastRunning = new Animation(new TextureRegion(new Texture("Gorefast_running.png")),4, 0.4f);
-        gorefastDeath = new Animation(new TextureRegion(new Texture("Gorefast_death.png")),20, 3f);
+        gorefastDeath = new Animation(new TextureRegion(new Texture("Gorefast_death.png")),20, 1.5f);
 
     }
 
     public void run(){
         this.state = GoreState.RUNNING;
+    }
+    public void attack(){
+        this.state = GoreState.ATTACKING;
+    }
+    public void die(){
+        this.state = GoreState.DIE;
     }
 
     public void update(float dt){

@@ -12,24 +12,42 @@ public class PlayState extends State {
     private Husk husk;
     private Player player;
     private Patriarch patriarch;
+    private int currentAction = 0;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
         goreFast = new Gorefast(-75, 0);
         husk = new Husk(-75, 150);
         player = new Player(75, 0);
-        patriarch = new Patriarch(75, 150);
+        patriarch = new Patriarch(60, 150);
 
     }
 
     @Override
     public void handleInput() {
+
         if (Gdx.input.justTouched()){
-            goreFast.run();
+
             husk.run();
             player.run();
             patriarch.run();
+
+
+            switch (this.currentAction){
+                case 0:
+                    goreFast.run();
+                    break;
+                case 1:
+                    goreFast.attack();
+                    break;
+                case 2:
+                    goreFast.die();
+                    break;
+            }
+
+            this.currentAction += 1;
         }
+
     }
 
     @Override

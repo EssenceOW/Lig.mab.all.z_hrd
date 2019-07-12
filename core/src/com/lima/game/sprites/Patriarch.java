@@ -51,7 +51,7 @@ public class Patriarch {
         collided = false;
         velocity = new Vector2(0,0);
         state = PatState.IDLE;
-        texture = new Texture("Husk.png");
+        texture = new Texture("Patriarch.png");
 //        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));

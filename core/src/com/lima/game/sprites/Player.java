@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Player {
 
-    private HuskState state;
+    private PlayerState state;
     private static final int MOVEMENT = 100;
     private Rectangle bounds;
     private Animation currentAnimation;
@@ -46,7 +46,7 @@ public class Player {
         position = new Vector2(x,y);
         collided = false;
         velocity = new Vector2(0,0);
-        state = HuskState.IDLE;
+        state = PlayerState.IDLE;
         texture = new Texture("Player.png");
 //        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
@@ -56,7 +56,7 @@ public class Player {
     }
 
     public void run(){
-        this.state = HuskState.WALKING;
+        this.state = PlayerState.WALKING;
     }
 
     public void update(float dt){

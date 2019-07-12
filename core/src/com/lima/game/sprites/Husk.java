@@ -16,6 +16,7 @@ public class Husk {
 
     private Animation huskWalking;
     private Animation huskDeath;
+    private Animation huskAttack;
     private Texture texture;
     private Vector2 position;
     private Vector2 velocity;
@@ -42,6 +43,8 @@ public class Husk {
             case DEATH:
                 this.currentAnimation = huskDeath;
                 break;
+            case ATTACKING:
+                this.currentAnimation = huskAttack;
         }
         return this.currentAnimation.getFrame();
     }
@@ -57,7 +60,7 @@ public class Husk {
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
         huskWalking = new Animation(new TextureRegion(new Texture("Husk_walking.png")),4, 0.5f);
         huskDeath = new Animation(new TextureRegion(new Texture("Husk_death.png")),4, 3f);
-
+        huskAttack = new Animation(new TextureRegion(new Texture("Husk_attack.png")),4, 3f);
     }
 
     public void run(){

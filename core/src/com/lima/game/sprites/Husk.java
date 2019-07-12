@@ -55,8 +55,8 @@ public class Husk {
 //        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
-        huskWalking = new Animation(new TextureRegion(new Texture("Husk_walking.png")),4, 0.3f);
-        huskDeath = new Animation(new TextureRegion(new Texture("Husk_death.png")),4, 0.3f);
+        huskWalking = new Animation(new TextureRegion(new Texture("Husk_walking.png")),4, 0.5f);
+        huskDeath = new Animation(new TextureRegion(new Texture("Husk_death.png")),4, 3f);
 
     }
 

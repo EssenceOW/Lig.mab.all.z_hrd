@@ -40,7 +40,7 @@ public class Husk {
                 break;
             default:
                 return new TextureRegion(texture);
-            case DEATH:
+            case DIE:
                 this.currentAnimation = huskDeath;
                 break;
             case ATTACKING:
@@ -59,12 +59,18 @@ public class Husk {
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
         huskWalking = new Animation(new TextureRegion(new Texture("Husk_walking.png")),4, 0.5f);
-        huskDeath = new Animation(new TextureRegion(new Texture("Husk_death.png")),4, 3f);
-        huskAttack = new Animation(new TextureRegion(new Texture("Husk_attack.png")),4, 3f);
+        huskDeath = new Animation(new TextureRegion(new Texture("Husk_death.png")),20, 1f);
+        huskAttack = new Animation(new TextureRegion(new Texture("Husk_attack.png")),8, 1f);
     }
 
     public void run(){
         this.state = HuskState.WALKING;
+    }
+    public void attack(){
+        this.state = HuskState.ATTACKING;
+    }
+    public void die(){
+        this.state = HuskState.DIE;
     }
 
     public void update(float dt){

@@ -26,55 +26,56 @@ public class PlayState extends State {
     @Override
     public void handleInput() {
 
-        if (Gdx.input.justTouched()){
+        if (Gdx.input.justTouched()) {
 
-            husk.run();
             player.run();
-            patriarch.run();
 
-
-            switch (this.currentAction){
+            switch (this.currentAction) {
                 case 0:
                     goreFast.run();
+                    husk.run();
+                    patriarch.run();
                     break;
                 case 1:
                     goreFast.attack();
+                    husk.attack();
+                    patriarch.attack();
                     break;
                 case 2:
                     goreFast.die();
+                    husk.die();
+                    patriarch.die();
                     break;
             }
-
             this.currentAction += 1;
         }
-
     }
 
-    @Override
-    public void update(float dt) {
-        super.update(dt);
-        goreFast.update(dt);
-        husk.update(dt);
-        player.update(dt);
-        patriarch.update(dt);
-    }
+        @Override
+        public void update(float dt){
+            super.update(dt);
+            goreFast.update(dt);
+            husk.update(dt);
+            player.update(dt);
+            patriarch.update(dt);
+        }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        super.render(sb);
-        sb.begin();
-        sb.draw(goreFast.getTexture(), goreFast.getPosition().x, goreFast.getPosition().y);
-        sb.draw(husk.getTexture(), husk.getPosition().x, husk.getPosition().y);
-        sb.draw(player.getTexture(), player.getPosition().x, player.getPosition().y);
-        sb.draw(patriarch.getTexture(), patriarch.getPosition().x, patriarch.getPosition().y);
-        sb.end();
-    }
+        @Override
+        public void render(SpriteBatch sb){
+            super.render(sb);
+            sb.begin();
+            sb.draw(goreFast.getTexture(), goreFast.getPosition().x, goreFast.getPosition().y);
+            sb.draw(husk.getTexture(), husk.getPosition().x, husk.getPosition().y);
+            sb.draw(player.getTexture(), player.getPosition().x, player.getPosition().y);
+            sb.draw(patriarch.getTexture(), patriarch.getPosition().x, patriarch.getPosition().y);
+            sb.end();
+        }
 
-    @Override
-    public void dispose() {
-        goreFast.dispose();
-        husk.dispose();
-        player.dispose();
-        patriarch.dispose();
+        @Override
+        public void dispose(){
+            goreFast.dispose();
+            husk.dispose();
+            player.dispose();
+            patriarch.dispose();
+        }
     }
-}

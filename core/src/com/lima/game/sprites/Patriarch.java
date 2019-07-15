@@ -16,6 +16,7 @@ public class Patriarch {
 
     private Animation patriarchWalking;
     private Animation patriarchDeath;
+    private Animation patriarchAttack;
     private Texture texture;
     private Vector2 position;
     private Vector2 velocity;
@@ -39,9 +40,11 @@ public class Patriarch {
                 break;
             default:
                 return new TextureRegion(texture);
-            case DEATH:
+            case DIE:
                 this.currentAnimation = patriarchDeath;
                 break;
+            case ATTACKING:
+                this.currentAnimation = patriarchAttack;
         }
         return this.currentAnimation.getFrame();
     }
@@ -56,12 +59,18 @@ public class Patriarch {
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
         patriarchWalking = new Animation(new TextureRegion(new Texture("Patriarch_walking.png")),4, 0.5f);
-        patriarchDeath = new Animation(new TextureRegion(new Texture("Patriarch_death.png")),4, 3f);
-
+        patriarchDeath = new Animation(new TextureRegion(new Texture("Patriarch_death.png")),16, 1f);
+        patriarchAttack = new Animation(new TextureRegion(new Texture("Patriarch_attack.png")),5, 0.5f);
     }
 
     public void run(){
         this.state = PatState.WALKING;
+    }
+    public void attack(){
+        this.state = PatState.ATTACKING;
+    }
+    public void die(){
+        this.state = PatState.DIE;
     }
 
     public void update(float dt){

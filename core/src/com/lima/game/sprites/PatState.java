@@ -2,6 +2,7 @@ package com.lima.game.sprites;
 
 public enum PatState {
     WALKING,
-    DEATH,
+    ATTACKING,
+    DIE,
     IDLE
 }

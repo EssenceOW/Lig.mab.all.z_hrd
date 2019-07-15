@@ -27,24 +27,24 @@ public class PlayState extends State {
     public void handleInput() {
 
         if (Gdx.input.justTouched()) {
-
-            player.run();
-
             switch (this.currentAction) {
                 case 0:
                     goreFast.run();
                     husk.run();
                     patriarch.run();
+                    player.run();
                     break;
                 case 1:
                     goreFast.attack();
                     husk.attack();
                     patriarch.attack();
+                    player.jump();
                     break;
                 case 2:
                     goreFast.die();
                     husk.die();
                     patriarch.die();
+                    player.crouch();
                     break;
             }
             this.currentAction += 1;

@@ -15,6 +15,8 @@ public class Player {
     private Animation currentAnimation;
 
     private Animation playerWalking;
+    private Animation playerJumping;
+    private Animation playerCrouching;
     private Texture texture;
     private Vector2 position;
     private Vector2 velocity;
@@ -36,6 +38,12 @@ public class Player {
             case WALKING:
                 this.currentAnimation = playerWalking;
                 break;
+            case JUMPING:
+                this.currentAnimation = playerJumping;
+                break;
+            case CROUCHING:
+                this.currentAnimation = playerCrouching;
+                break;
             default:
                 return new TextureRegion(texture);
         }
@@ -52,11 +60,19 @@ public class Player {
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
         playerWalking = new Animation(new TextureRegion(new Texture("Player_walking.png")),4, 0.5f);
+        playerJumping = new Animation(new TextureRegion(new Texture("Player_jumping.png")),16, 1f);
+        playerCrouching = new Animation(new TextureRegion(new Texture("Player_crouching.png")),5, 0.4f);
 
     }
 
     public void run(){
         this.state = PlayerState.WALKING;
+    }
+    public void jump(){
+        this.state = PlayerState.JUMPING;
+    }
+    public void crouch(){
+        this.state = PlayerState.CROUCHING;
     }
 
     public void update(float dt){

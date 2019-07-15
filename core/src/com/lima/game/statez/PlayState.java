@@ -18,8 +18,8 @@ public class PlayState extends State {
         super(gsm);
         goreFast = new Gorefast(-75, 0);
         husk = new Husk(-75, 150);
-        player = new Player(75, 0);
-        patriarch = new Patriarch(60, 150);
+        player = new Player(60, 150);
+        patriarch = new Patriarch(60, 0);
 
     }
 

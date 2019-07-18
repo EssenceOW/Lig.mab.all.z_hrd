@@ -1,20 +1,32 @@
-package com.lima.game.statez;
+package com.lima.game.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
+import com.lima.game.blzhrd;
 import com.lima.game.sprites.Gorefast;
 import com.lima.game.sprites.Husk;
 import com.lima.game.sprites.Patriarch;
 import com.lima.game.sprites.Player;
-
+import com.lima.game.sprites.PlayerSprite;
 
 
 public class PlayState extends State {
+    private final World world;
+    private final Box2DDebugRenderer b2dr;
     private Gorefast goreFast;
     private Husk husk;
     private Player player;
@@ -22,23 +34,72 @@ public class PlayState extends State {
     private int currentAction = 0;
 
     private TmxMapLoader mapLoader;
-    private TiledMap tiledMap;
+    private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
         goreFast = new Gorefast(155, 55);
         husk = new Husk(10, 105);
-        player = new Player(0, 5);
+
+
         patriarch = new Patriarch(0, 200);
 
         mapLoader = new TmxMapLoader();
-        tiledMap = mapLoader.load("killingfloor.tmx");
-        mapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        map = mapLoader.load("killingfloor.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map, 1/ blzhrd.PPM);
+
+        world = new World(new Vector2(0,-110),true);
+        b2dr = new Box2DDebugRenderer();
+
+        player = new Player(40, 100, world);
+        loadGround();
+        loadBossGround();
+    }
+
+    private void loadGround() {
+        BodyDef bdef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+        Body body;
+
+        for(MapObject object: map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject)object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set(rect.x + rect.width / 2, rect.y + rect.height / 2 );
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.width/2, rect.height/2);
+            fdef.shape = shape;
+            body.createFixture(fdef);
+        }
+    }
+
+    private void loadBossGround() {
+        BodyDef bdef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+        Body body;
+
+        for(MapObject object: map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject)object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set(rect.x + rect.width / 2, rect.y + rect.height / 2 );
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.width/2, rect.height/2);
+            fdef.shape = shape;
+            body.createFixture(fdef);
+        }
     }
 
     @Override
     public void handleInput() {
+
 
         if (Gdx.input.justTouched()) {
             switch (this.currentAction) {
@@ -60,6 +121,9 @@ public class PlayState extends State {
                     patriarch.die();
                     player.attackWithLargeGun();
                     break;
+                case 3:
+                    player.attackWithRocketLauncher();
+                    break;
             }
             this.currentAction += 1;
         }
@@ -67,11 +131,17 @@ public class PlayState extends State {
 
         @Override
         public void update(float dt){
+
             super.update(dt);
+
+            world.step(1/60f,  6,2);
             goreFast.update(dt);
             husk.update(dt);
             player.update(dt);
             patriarch.update(dt);
+
+            cam.update();
+            mapRenderer.setView(this.cam);
         }
 
         @Override
@@ -79,8 +149,10 @@ public class PlayState extends State {
             super.render(sb);
             Batch tileSB = this.mapRenderer.getBatch();
 
-            mapRenderer.setView(this.cam);
+
             mapRenderer.render();
+
+            b2dr.render(world, cam.combined);
 
             tileSB.begin();
 
@@ -88,7 +160,7 @@ public class PlayState extends State {
             tileSB.draw(patriarch.getTexture(), patriarch.getPosition().x, patriarch.getPosition().y, 100, 100);
             tileSB.draw(player.getTexture(), player.getPosition().x, player.getPosition().y,100, 100);
             if(player.getWeaponTexture() != null){
-                tileSB.draw(player.getWeaponTexture(), player.getWeaponPosition().x, player.getWeaponPosition().y);
+                tileSB.draw(player.getWeaponTexture(), player.getWeaponPosition().x, player.getWeaponPosition().y, 100, 100);
             }
             tileSB.draw(goreFast.getTexture(), goreFast.getPosition().x, goreFast.getPosition().y, 100, 100);
 

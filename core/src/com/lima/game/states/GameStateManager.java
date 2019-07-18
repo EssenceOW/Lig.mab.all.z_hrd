@@ -1,4 +1,4 @@
-package com.lima.game.statez;
+package com.lima.game.states;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

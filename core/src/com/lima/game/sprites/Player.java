@@ -6,8 +6,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class Player {
+    private final World world;
+    private Body b2body;
 
     private final Texture playerAttackingWithHandgun;
     private final Texture playerAttackingWithLargeGun;
@@ -16,7 +23,6 @@ public class Player {
     private static final int MOVEMENT = 100;
     private Rectangle bounds;
     private Animation currentAnimation;
-
     private Animation playerWalking;
     private Animation playerJumping;
     private Animation playerCrouching;
@@ -25,9 +31,7 @@ public class Player {
     private Texture largeGun;
     private Texture rocketLauncher;
     private Vector2 position;
-    private Vector2 velocity;
     private boolean collided;
-
 
     public void setCollided(boolean collided) {
         this.collided = collided;
@@ -35,17 +39,19 @@ public class Player {
     public Rectangle getBounds() {
         return bounds;
     }
+
+
     public Vector2 getPosition() {
         return position;
     }
     public Vector2 getWeaponPosition(){
         switch(state){
             case ATTACK_WITH_HANDGUN:
-                return new Vector2(position.x + 50, position.y + 5);
+                return new Vector2(position.x + 21, position.y + 2);
             case ATTACK_WITH_LARGE_GUN:
-                return new Vector2(position.x + 15, position.y - 5);
+                return new Vector2(position.x + 6, position.y - 1);
             case ATTACK_WITH_ROCKET_LAUNCHER:
-                return new Vector2(position.x, position.y);
+                return new Vector2(position.x + 3, position.y + 3);
             default:
                 return null;
         }
@@ -87,18 +93,23 @@ public class Player {
         }
     }
 
-    public Player(int x, int y){
+    public Player(int x, int y, World world){
+
+
+
         position = new Vector2(x,y);
+        this.world = world;
+
+        this.define(x, y);
+
+
         collided = false;
-        velocity = new Vector2(0,0);
         state = PlayerState.IDLE;
         texture = new Texture("Player.png");
         handgun = new Texture("Pistol.png");
         largeGun = new Texture("SMG.png");
         rocketLauncher = new Texture("RPG.png");
-//        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
-//        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
         playerWalking = new Animation(new TextureRegion(new Texture("Player_walking.png")),4, 0.5f);
         playerJumping = new Animation(new TextureRegion(new Texture("Player_jumping.png")),16, 1f);
         playerCrouching = new Animation(new TextureRegion(new Texture("Player_crouching.png")),5, 0.4f);
@@ -126,10 +137,25 @@ public class Player {
         this.state = PlayerState.ATTACK_WITH_ROCKET_LAUNCHER;
     }
 
+    private void define(int x, int y) {
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(x, y);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(27);
+
+        fdef.shape = shape;
+        b2body.createFixture(fdef);
+    }
+
     public void update(float dt){
         if (currentAnimation!=null){
             currentAnimation.update(dt);
         }
+        this.position = b2body.getPosition();
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }

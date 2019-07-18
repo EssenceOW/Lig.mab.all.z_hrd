@@ -6,6 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class Patriarch {
 
@@ -21,7 +26,8 @@ public class Patriarch {
     private Vector2 position;
     private Vector2 velocity;
     private boolean collided;
-
+    private Body b2body;
+    private World world;
 
     public void setCollided(boolean collided) {
         this.collided = collided;
@@ -49,7 +55,11 @@ public class Patriarch {
         return this.currentAnimation.getFrame();
     }
 
-    public Patriarch(int x, int y){
+    public Patriarch(int x, int y, World world){
+        position = new Vector2(x,y);
+        this.world = world;
+        this.define(x, y);
+
         position = new Vector2(x,y);
         collided = false;
         velocity = new Vector2(0,0);
@@ -58,9 +68,9 @@ public class Patriarch {
 //        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
-        patriarchWalking = new Animation(new TextureRegion(new Texture("Patriarch_walking.png")),4, 0.5f);
-        patriarchDeath = new Animation(new TextureRegion(new Texture("Patriarch_death.png")),16, 1f);
-        patriarchAttack = new Animation(new TextureRegion(new Texture("Patriarch_attack.png")),5, 0.5f);
+        patriarchWalking = new Animation(new TextureRegion(new Texture("Patriarch_walking.png")),4, 0.5f, false);
+        patriarchDeath = new Animation(new TextureRegion(new Texture("Patriarch_death.png")),16, 1f, false);
+        patriarchAttack = new Animation(new TextureRegion(new Texture("Patriarch_attack.png")),5, 0.5f, false);
     }
 
     public void run(){
@@ -73,10 +83,27 @@ public class Patriarch {
         this.state = PatState.DIE;
     }
 
+    private void define(int x, int y) {
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(x, y);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(27);
+
+        fdef.shape = shape;
+        b2body.createFixture(fdef);
+    }
+
     public void update(float dt){
         if (currentAnimation!=null){
             currentAnimation.update(dt);
         }
+
+        this.position.x = b2body.getPosition().x - 50;
+        this.position.y = b2body.getPosition().y - 51;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }
@@ -102,7 +129,3 @@ public class Patriarch {
     public void dispose() {
     }
 }
-
-
-
-

@@ -6,6 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class Husk {
 
@@ -21,6 +26,8 @@ public class Husk {
     private Vector2 position;
     private Vector2 velocity;
     private boolean collided;
+    private Body b2body;
+    private World world;
 
 
     public void setCollided(boolean collided) {
@@ -49,8 +56,11 @@ public class Husk {
         return this.currentAnimation.getFrame();
     }
 
-    public Husk(int x, int y){
+    public Husk(int x, int y, World world){
         position = new Vector2(x,y);
+        this.world = world;
+        this.define(x, y);
+
         collided = false;
         velocity = new Vector2(0,0);
         state = HuskState.IDLE;
@@ -58,9 +68,12 @@ public class Husk {
 //        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
-        huskWalking = new Animation(new TextureRegion(new Texture("Husk_walking.png")),4, 0.5f);
-        huskDeath = new Animation(new TextureRegion(new Texture("Husk_death.png")),20, 1f);
-        huskAttack = new Animation(new TextureRegion(new Texture("Husk_attack.png")),8, 1f);
+        huskWalking = new Animation(new TextureRegion(new Texture("Husk_walking.png")),4, 0.5f, false
+        );
+        huskDeath = new Animation(new TextureRegion(new Texture("Husk_death.png")),20, 1f, false
+        );
+        huskAttack = new Animation(new TextureRegion(new Texture("Husk_attack.png")),8, 1f, false
+        );
     }
 
     public void run(){
@@ -73,10 +86,26 @@ public class Husk {
         this.state = HuskState.DIE;
     }
 
+    private void define(int x, int y) {
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(x, y);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(27);
+
+        fdef.shape = shape;
+        b2body.createFixture(fdef);
+    }
+
     public void update(float dt){
         if (currentAnimation!=null){
             currentAnimation.update(dt);
         }
+        this.position.x = b2body.getPosition().x - 49;
+        this.position.y = b2body.getPosition().y - 51;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }

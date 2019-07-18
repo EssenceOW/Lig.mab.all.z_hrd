@@ -1,7 +1,7 @@
 package com.lima.game.sprites;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -11,6 +11,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Timer;
+
+import java.util.logging.Handler;
 
 public class Player {
     private final World world;
@@ -92,6 +95,9 @@ public class Player {
                 return null;
         }
     }
+    public Body getB2body() {
+        return b2body;
+    }
 
     public Player(int x, int y, World world){
 
@@ -110,9 +116,9 @@ public class Player {
         largeGun = new Texture("SMG.png");
         rocketLauncher = new Texture("RPG.png");
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
-        playerWalking = new Animation(new TextureRegion(new Texture("Player_walking.png")),4, 0.5f);
-        playerJumping = new Animation(new TextureRegion(new Texture("Player_jumping.png")),16, 1f);
-        playerCrouching = new Animation(new TextureRegion(new Texture("Player_crouching.png")),5, 0.4f);
+        playerWalking = new Animation(new TextureRegion(new Texture("Player_walking.png")),4, 0.5f, false);
+        playerJumping = new Animation(new TextureRegion(new Texture("Player_jumping.png")),16, 1f, false);
+        playerCrouching = new Animation(new TextureRegion(new Texture("Player_crouching.png")),5, 0.4f, false);
         playerAttackingWithHandgun = new Texture("Player_holding_handgun.png");
         playerAttackingWithLargeGun = new Texture("Player_holding_large_gun.png");
         playerAttackingWithRocketLauncher = new Texture("Player_holding_large_gun.png");
@@ -123,6 +129,14 @@ public class Player {
     }
     public void jump(){
         this.state = PlayerState.JUMPING;
+        b2body.applyLinearImpulse(new Vector2(0,100f), b2body.getWorldCenter(), true);
+        Timer timer = new Timer();
+        timer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                state = PlayerState.IDLE;
+            }
+        }, 1f);
     }
     public void crouch(){
         this.state = PlayerState.CROUCHING;
@@ -137,6 +151,15 @@ public class Player {
         this.state = PlayerState.ATTACK_WITH_ROCKET_LAUNCHER;
     }
 
+    public void moveRight(){
+        b2body.applyLinearImpulse(new Vector2(100f,0), b2body.getWorldCenter(), true);
+    }
+    public void moveLeft(){
+        b2body.applyLinearImpulse(new Vector2(-100f,0), b2body.getWorldCenter(), true);
+    }
+
+
+
     private void define(int x, int y) {
         BodyDef bdef = new BodyDef();
         bdef.position.set(x, y);
@@ -148,14 +171,15 @@ public class Player {
         shape.setRadius(27);
 
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        getB2body().createFixture(fdef);
     }
 
     public void update(float dt){
         if (currentAnimation!=null){
             currentAnimation.update(dt);
         }
-        this.position = b2body.getPosition();
+        this.position.x = getB2body().getPosition().x - 47;
+        this.position.y = getB2body().getPosition().y - 54;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }
@@ -180,5 +204,6 @@ public class Player {
 
     public void dispose() {
     }
+
 
 }

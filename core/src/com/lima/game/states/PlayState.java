@@ -1,6 +1,7 @@
 package com.lima.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
@@ -39,11 +40,7 @@ public class PlayState extends State {
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-        goreFast = new Gorefast(155, 55);
-        husk = new Husk(10, 105);
 
-
-        patriarch = new Patriarch(0, 200);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("killingfloor.tmx");
@@ -53,6 +50,9 @@ public class PlayState extends State {
         b2dr = new Box2DDebugRenderer();
 
         player = new Player(40, 100, world);
+        patriarch = new Patriarch(40, 300, world);
+        goreFast = new Gorefast(200, 155, world);
+        husk = new Husk(60, 180, world);
         loadGround();
         loadBossGround();
     }
@@ -99,7 +99,12 @@ public class PlayState extends State {
 
     @Override
     public void handleInput() {
-
+        if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            player.jump();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <=2)
+            player.moveRight();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >=-2)
+            player.moveLeft();
 
         if (Gdx.input.justTouched()) {
             switch (this.currentAction) {

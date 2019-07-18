@@ -6,6 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class Gorefast {
 
@@ -21,6 +26,8 @@ public class Gorefast {
     private Vector2 position;
     private Vector2 velocity;
     private boolean collided;
+    private Body b2body;
+    private World world;
 
 
     public void setCollided(boolean collided) {
@@ -52,7 +59,11 @@ public class Gorefast {
 
 
 
-    public Gorefast(int x, int y){
+    public Gorefast(int x, int y, World world){
+        position = new Vector2(x,y);
+        this.world = world;
+        this.define(x, y);
+
         position = new Vector2(x,y);
         collided = false;
         velocity = new Vector2(0,0);
@@ -61,9 +72,10 @@ public class Gorefast {
 //        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
-        gorefastAttack = new Animation(new TextureRegion(new Texture("Gorefast_attack.png")),16, 0.6f);
-        gorefastRunning = new Animation(new TextureRegion(new Texture("Gorefast_running.png")),4, 0.4f);
-        gorefastDeath = new Animation(new TextureRegion(new Texture("Gorefast_death.png")),20, 1.5f);
+        gorefastAttack = new Animation(new TextureRegion(new Texture("Gorefast_attack.png")),16, 0.6f, false);
+        gorefastRunning = new Animation(new TextureRegion(new Texture("Gorefast_running.png")),4, 0.4f, false
+        );
+        gorefastDeath = new Animation(new TextureRegion(new Texture("Gorefast_death.png")),20, 1.5f, false);
 
     }
 
@@ -77,10 +89,26 @@ public class Gorefast {
         this.state = GoreState.DIE;
     }
 
+    private void define(int x, int y) {
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(x, y);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(26);
+
+        fdef.shape = shape;
+        b2body.createFixture(fdef);
+    }
+
     public void update(float dt){
         if (currentAnimation!=null){
             currentAnimation.update(dt);
         }
+        this.position.x = b2body.getPosition().x - 48;
+        this.position.y = b2body.getPosition().y - 51;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }

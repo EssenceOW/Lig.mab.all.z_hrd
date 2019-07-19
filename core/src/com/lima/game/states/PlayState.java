@@ -100,17 +100,18 @@ public class PlayState extends State {
     public void handleInput() {
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
             player.jump();
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <=2)
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <=2) {
             player.moveRight();
             goreFast.moveRight();
             husk.moveRight();
             patriarch.moveRight();
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >=-2)
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >=-2) {
             player.moveLeft();
             goreFast.moveLeft();
             husk.moveLeft();
             patriarch.moveLeft();
-
+        }
         if (Gdx.input.justTouched()) {
             switch (this.currentAction) {
                 case 0:

@@ -88,11 +88,11 @@ public class Gorefast {
 
     public void moveRight(){
         this.state = GoreState.RUNNING;
-        b2body.applyLinearImpulse(new Vector2(100f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(10f,0), b2body.getWorldCenter(), true);
     }
     public void moveLeft(){
         this.state = GoreState.RUNNING;
-        b2body.applyLinearImpulse(new Vector2(-100f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(-10f,0), b2body.getWorldCenter(), true);
     }
 
     private void define(int x, int y) {

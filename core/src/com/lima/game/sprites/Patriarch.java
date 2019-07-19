@@ -85,11 +85,11 @@ public class Patriarch {
 
     public void moveRight(){
         this.state = PatState.WALKING;
-        b2body.applyLinearImpulse(new Vector2(100f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(10f,0), b2body.getWorldCenter(), true);
     }
     public void moveLeft(){
         this.state = PatState.WALKING;
-        b2body.applyLinearImpulse(new Vector2(-100f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(-10f,0), b2body.getWorldCenter(), true);
     }
 
     private void define(int x, int y) {

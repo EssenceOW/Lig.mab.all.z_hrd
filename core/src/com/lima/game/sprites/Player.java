@@ -61,9 +61,9 @@ public class Player implements Observer {
             case WALKING:
                 this.currentAnimation = playerWalking;
                 break;
-//            case JUMPING:
-//                this.currentAnimation = playerJumping;
-//                break;
+            case JUMPING:
+                this.currentAnimation = playerJumping;
+                break;
             case CROUCHING:
                 this.currentAnimation = playerCrouching;
                 break;
@@ -114,8 +114,8 @@ public class Player implements Observer {
         playerWalking = new Animation(new TextureRegion(new Texture("Player_walking.png")),4, 0.5f, false);
         playerWalking.addObserver(this);
 
-//        playerJumping = new Animation(new TextureRegion(new Texture("Player_jumping.png")),16, 1f, false);
-//        playerJumping.addObserver(this);
+        playerJumping = new Animation(new TextureRegion(new Texture("Player_jumping.png")),16, 1f, false);
+        playerJumping.addObserver(this);
 
         playerCrouching = new Animation(new TextureRegion(new Texture("Player_crouching.png")),5, 0.4f, false);
         playerAttackingWithHandgun = new Texture("Player_holding_handgun.png");
@@ -129,10 +129,7 @@ public class Player implements Observer {
     public void stand(){
         this.state = PlayerState.IDLE;
     }
-    public void jump(){
-        this.state = PlayerState.JUMPING;
-        b2body.applyLinearImpulse(new Vector2(0,100f), b2body.getWorldCenter(), true);
-    }
+
     public void crouch(){
         this.state = PlayerState.CROUCHING;
     }
@@ -146,13 +143,17 @@ public class Player implements Observer {
         this.state = PlayerState.ATTACK_WITH_ROCKET_LAUNCHER;
     }
 
+    public void jump(){
+        this.state = PlayerState.JUMPING;
+        b2body.applyLinearImpulse(new Vector2(0,50f), b2body.getWorldCenter(), true);
+    }
     public void moveRight(){
         this.state = PlayerState.WALKING;
-        b2body.applyLinearImpulse(new Vector2(100f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(5f,0), b2body.getWorldCenter(), true);
     }
     public void moveLeft(){
         this.state = PlayerState.WALKING;
-        b2body.applyLinearImpulse(new Vector2(-100f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(-5f,0), b2body.getWorldCenter(), true);
     }
 
     private void define(int x, int y) {

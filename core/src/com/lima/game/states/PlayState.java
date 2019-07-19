@@ -98,19 +98,21 @@ public class PlayState extends State {
 
     @Override
     public void handleInput() {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
+        if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             player.jump();
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <=2)
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <=2) {
             player.moveRight();
             goreFast.moveRight();
             husk.moveRight();
             patriarch.moveRight();
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >=-2)
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >=-2) {
             player.moveLeft();
             goreFast.moveLeft();
             husk.moveLeft();
             patriarch.moveLeft();
-
+        }
         if (Gdx.input.justTouched()) {
             switch (this.currentAction) {
                 case 0:
@@ -169,6 +171,8 @@ public class PlayState extends State {
             tileSB.draw(husk.getTexture(), husk.getPosition().x, husk.getPosition().y, 100, 100);
             tileSB.draw(patriarch.getTexture(), patriarch.getPosition().x, patriarch.getPosition().y, 100, 100);
             tileSB.draw(player.getTexture(), player.getPosition().x, player.getPosition().y,100, 100);
+
+
             if(player.getWeaponTexture() != null){
                 tileSB.draw(player.getWeaponTexture(), player.getWeaponPosition().x, player.getWeaponPosition().y, 100, 100);
             }

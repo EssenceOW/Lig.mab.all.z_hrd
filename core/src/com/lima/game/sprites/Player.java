@@ -13,9 +13,11 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Timer;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Handler;
 
-public class Player {
+public class Player implements Observer {
     private final World world;
     private Body b2body;
 
@@ -115,9 +117,18 @@ public class Player {
         handgun = new Texture("Pistol.png");
         largeGun = new Texture("SMG.png");
         rocketLauncher = new Texture("RPG.png");
+
+
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
+
         playerWalking = new Animation(new TextureRegion(new Texture("Player_walking.png")),4, 0.5f, false);
+        playerWalking.addObserver(this);
+
         playerJumping = new Animation(new TextureRegion(new Texture("Player_jumping.png")),16, 1f, false);
+        playerJumping.addObserver(this);
+
+
+
         playerCrouching = new Animation(new TextureRegion(new Texture("Player_crouching.png")),5, 0.4f, false);
         playerAttackingWithHandgun = new Texture("Player_holding_handgun.png");
         playerAttackingWithLargeGun = new Texture("Player_holding_large_gun.png");
@@ -127,16 +138,12 @@ public class Player {
     public void run(){
         this.state = PlayerState.WALKING;
     }
+    public void stand(){
+        this.state = PlayerState.IDLE;
+    }
     public void jump(){
         this.state = PlayerState.JUMPING;
         b2body.applyLinearImpulse(new Vector2(0,100f), b2body.getWorldCenter(), true);
-        Timer timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                state = PlayerState.IDLE;
-            }
-        }, 1f);
     }
     public void crouch(){
         this.state = PlayerState.CROUCHING;
@@ -152,10 +159,12 @@ public class Player {
     }
 
     public void moveRight(){
-        b2body.applyLinearImpulse(new Vector2(100f,0), b2body.getWorldCenter(), true);
+        this.state = PlayerState.WALKING;
+        b2body.applyLinearImpulse(new Vector2(10f,0), b2body.getWorldCenter(), true);
     }
     public void moveLeft(){
-        b2body.applyLinearImpulse(new Vector2(-100f,0), b2body.getWorldCenter(), true);
+        this.state = PlayerState.WALKING;
+        b2body.applyLinearImpulse(new Vector2(-10f,0), b2body.getWorldCenter(), true);
     }
 
 
@@ -174,7 +183,7 @@ public class Player {
         getB2body().createFixture(fdef);
     }
 
-    public void update(float dt){
+    public void updateSprite(float dt){
         if (currentAnimation!=null){
             currentAnimation.update(dt);
         }
@@ -205,5 +214,12 @@ public class Player {
     public void dispose() {
     }
 
-
+    @Override
+    public void update(Observable observable, Object o) {
+        Animation a = (Animation) observable;
+        if (a.isLoopComplete()){
+            a.resetFrame();
+            this.state = PlayerState.IDLE;
+        }
+    }
 }

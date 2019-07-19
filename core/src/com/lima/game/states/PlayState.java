@@ -22,7 +22,6 @@ import com.lima.game.sprites.Gorefast;
 import com.lima.game.sprites.Husk;
 import com.lima.game.sprites.Patriarch;
 import com.lima.game.sprites.Player;
-import com.lima.game.sprites.PlayerSprite;
 
 
 public class PlayState extends State {
@@ -101,9 +100,9 @@ public class PlayState extends State {
     public void handleInput() {
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
             player.jump();
-        if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <=2)
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <=2)
             player.moveRight();
-        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >=-2)
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >=-2)
             player.moveLeft();
 
         if (Gdx.input.justTouched()) {
@@ -142,7 +141,7 @@ public class PlayState extends State {
             world.step(1/60f,  6,2);
             goreFast.update(dt);
             husk.update(dt);
-            player.update(dt);
+            player.updateSprite(dt);
             patriarch.update(dt);
 
             cam.update();

@@ -1,7 +1,5 @@
 package com.lima.game.sprites;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -76,7 +74,6 @@ public class Gorefast {
         gorefastRunning = new Animation(new TextureRegion(new Texture("Gorefast_running.png")),4, 0.4f, false
         );
         gorefastDeath = new Animation(new TextureRegion(new Texture("Gorefast_death.png")),20, 1.5f, false);
-
     }
 
     public void run(){
@@ -87,6 +84,15 @@ public class Gorefast {
     }
     public void die(){
         this.state = GoreState.DIE;
+    }
+
+    public void moveRight(){
+        this.state = GoreState.RUNNING;
+        b2body.applyLinearImpulse(new Vector2(100f,0), b2body.getWorldCenter(), true);
+    }
+    public void moveLeft(){
+        this.state = GoreState.RUNNING;
+        b2body.applyLinearImpulse(new Vector2(-100f,0), b2body.getWorldCenter(), true);
     }
 
     private void define(int x, int y) {

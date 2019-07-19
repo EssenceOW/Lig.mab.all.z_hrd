@@ -86,6 +86,15 @@ public class Husk {
         this.state = HuskState.DIE;
     }
 
+    public void moveRight(){
+        this.state = HuskState.WALKING;
+        b2body.applyLinearImpulse(new Vector2(100f,0), b2body.getWorldCenter(), true);
+    }
+    public void moveLeft(){
+        this.state = HuskState.WALKING;
+        b2body.applyLinearImpulse(new Vector2(-100f,0), b2body.getWorldCenter(), true);
+    }
+
     private void define(int x, int y) {
         BodyDef bdef = new BodyDef();
         bdef.position.set(x, y);
@@ -105,7 +114,7 @@ public class Husk {
             currentAnimation.update(dt);
         }
         this.position.x = b2body.getPosition().x - 49;
-        this.position.y = b2body.getPosition().y - 51;
+        this.position.y = b2body.getPosition().y - 50;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }

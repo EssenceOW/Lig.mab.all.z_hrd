@@ -42,7 +42,7 @@ public class PlayState extends State {
 
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("killingfloor.tmx");
+        map = mapLoader.load("maps/killingfloor_lvl_1.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1/ blzhrd.PPM);
 
         world = new World(new Vector2(0,-110),true);
@@ -50,8 +50,8 @@ public class PlayState extends State {
 
         player = new Player(40, 100, world);
         patriarch = new Patriarch(40, 300, world);
-        goreFast = new Gorefast(200, 155, world);
-        husk = new Husk(60, 180, world);
+        goreFast = new Gorefast(120, 300, world);
+        husk = new Husk(200, 300, world);
         loadGround();
         loadBossGround();
     }
@@ -82,7 +82,7 @@ public class PlayState extends State {
         FixtureDef fdef = new FixtureDef();
         Body body;
 
-        for(MapObject object: map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object: map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
@@ -102,8 +102,14 @@ public class PlayState extends State {
             player.jump();
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <=2)
             player.moveRight();
+            goreFast.moveRight();
+            husk.moveRight();
+            patriarch.moveRight();
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >=-2)
             player.moveLeft();
+            goreFast.moveLeft();
+            husk.moveLeft();
+            patriarch.moveLeft();
 
         if (Gdx.input.justTouched()) {
             switch (this.currentAction) {

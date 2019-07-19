@@ -1,7 +1,5 @@
 package com.lima.game.sprites;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -11,11 +9,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Timer;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Handler;
 
 public class Player implements Observer {
     private final World world;
@@ -44,8 +40,6 @@ public class Player implements Observer {
     public Rectangle getBounds() {
         return bounds;
     }
-
-
     public Vector2 getPosition() {
         return position;
     }
@@ -67,9 +61,9 @@ public class Player implements Observer {
             case WALKING:
                 this.currentAnimation = playerWalking;
                 break;
-            case JUMPING:
-                this.currentAnimation = playerJumping;
-                break;
+//            case JUMPING:
+//                this.currentAnimation = playerJumping;
+//                break;
             case CROUCHING:
                 this.currentAnimation = playerCrouching;
                 break;
@@ -103,13 +97,10 @@ public class Player implements Observer {
 
     public Player(int x, int y, World world){
 
-
-
         position = new Vector2(x,y);
         this.world = world;
 
         this.define(x, y);
-
 
         collided = false;
         state = PlayerState.IDLE;
@@ -118,16 +109,13 @@ public class Player implements Observer {
         largeGun = new Texture("SMG.png");
         rocketLauncher = new Texture("RPG.png");
 
-
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 
         playerWalking = new Animation(new TextureRegion(new Texture("Player_walking.png")),4, 0.5f, false);
         playerWalking.addObserver(this);
 
-        playerJumping = new Animation(new TextureRegion(new Texture("Player_jumping.png")),16, 1f, false);
-        playerJumping.addObserver(this);
-
-
+//        playerJumping = new Animation(new TextureRegion(new Texture("Player_jumping.png")),16, 1f, false);
+//        playerJumping.addObserver(this);
 
         playerCrouching = new Animation(new TextureRegion(new Texture("Player_crouching.png")),5, 0.4f, false);
         playerAttackingWithHandgun = new Texture("Player_holding_handgun.png");
@@ -160,14 +148,12 @@ public class Player implements Observer {
 
     public void moveRight(){
         this.state = PlayerState.WALKING;
-        b2body.applyLinearImpulse(new Vector2(10f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(100f,0), b2body.getWorldCenter(), true);
     }
     public void moveLeft(){
         this.state = PlayerState.WALKING;
-        b2body.applyLinearImpulse(new Vector2(-10f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(-100f,0), b2body.getWorldCenter(), true);
     }
-
-
 
     private void define(int x, int y) {
         BodyDef bdef = new BodyDef();

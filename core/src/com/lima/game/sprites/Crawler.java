@@ -11,18 +11,18 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Gorefast {
+public class Crawler {
 
-    private GoreState state;
+    private CrawlerState state;
     private static final int MOVEMENT = 100;
     private int health;
     private int damage;
     private Rectangle bounds;
     private Animation currentAnimation;
 
-    private Animation gorefastRunning;
-    private Animation gorefastDeath;
-    private Animation gorefastAttack;
+    private Animation crawlerRunning;
+//    private Animation crawlerDeath;
+    private Animation crawlerAttack;
     private Texture texture;
     private Vector2 position;
     private Vector2 velocity;
@@ -43,14 +43,14 @@ public class Gorefast {
 
     public TextureRegion getTexture() {
         switch(state){
-            case DIE:
-                this.currentAnimation = gorefastDeath;
-                break;
-            case RUNNING:
-                this.currentAnimation = gorefastRunning;
+//            case DIE:
+//                this.currentAnimation = crawlerDeath;
+//                break;
+            case CRAWLING:
+                this.currentAnimation = crawlerRunning;
                 break;
             case ATTACKING:
-                this.currentAnimation = gorefastAttack;
+                this.currentAnimation = crawlerAttack;
                 break;
             default:
                 return new TextureRegion(texture);
@@ -58,10 +58,12 @@ public class Gorefast {
         return this.currentAnimation.getFrame();
     }
 
-    public Gorefast(int x, int y, World world){
 
-        health = 250;
-        damage = 18;
+
+    public Crawler(int x, int y, World world){
+
+        health = 70;
+        damage = 9;
         position = new Vector2(x,y);
         this.world = world;
         this.define(x, y);
@@ -69,33 +71,32 @@ public class Gorefast {
         position = new Vector2(x,y);
         collided = false;
         velocity = new Vector2(0,0);
-        state = GoreState.IDLE;
-        texture = new Texture("Gorefast.png");
+        state = CrawlerState.IDLE;
+        texture = new Texture("Crawler.png");
 //        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
-        gorefastAttack = new Animation(new TextureRegion(new Texture("Gorefast_attack.png")),16, 0.6f, false);
-        gorefastRunning = new Animation(new TextureRegion(new Texture("Gorefast_running.png")),4, 0.4f, false
-        );
-        gorefastDeath = new Animation(new TextureRegion(new Texture("Gorefast_death.png")),20, 1.5f, false);
+        crawlerAttack = new Animation(new TextureRegion(new Texture("Crawler_attack.png")),12, 0.6f, false);
+        crawlerRunning = new Animation(new TextureRegion(new Texture("Crawler_crawling.png")),4, 0.4f, false);
+//        crawlerDeath = new Animation(new TextureRegion(new Texture("Crawler_death.png")),20, 1.5f, false);
     }
 
     public void run(){
-        this.state = GoreState.RUNNING;
+        this.state = CrawlerState.CRAWLING;
     }
     public void attack(){
-        this.state = GoreState.ATTACKING;
+        this.state = CrawlerState.ATTACKING;
     }
-    public void die(){
-        this.state = GoreState.DIE;
-    }
+//    public void die(){
+//        this.state = CrawlerState.DIE;
+//    }
 
     public void moveRight(){
-        this.state = GoreState.RUNNING;
+        this.state = CrawlerState.CRAWLING;
         b2body.applyLinearImpulse(new Vector2(50f,0), b2body.getWorldCenter(), true);
     }
     public void moveLeft(){
-        this.state = GoreState.RUNNING;
+        this.state = CrawlerState.CRAWLING;
         b2body.applyLinearImpulse(new Vector2(-50f,0), b2body.getWorldCenter(), true);
     }
 
@@ -107,7 +108,7 @@ public class Gorefast {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(15, 25);
+        shape.setAsBox(15, 14);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
@@ -117,8 +118,8 @@ public class Gorefast {
         if (currentAnimation!=null){
             currentAnimation.update(dt);
         }
-        this.position.x = b2body.getPosition().x - 48;
-        this.position.y = b2body.getPosition().y - 51;
+        this.position.x = b2body.getPosition().x - 86;
+        this.position.y = b2body.getPosition().y - 141;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }

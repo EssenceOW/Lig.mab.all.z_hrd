@@ -8,12 +8,14 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Husk {
-
     private HuskState state;
     private static final int MOVEMENT = 100;
+    private int health;
+    private int damage;
     private Rectangle bounds;
     private Animation currentAnimation;
 
@@ -55,6 +57,8 @@ public class Husk {
     }
 
     public Husk(int x, int y, World world){
+        health = 600;
+        damage = 20;
         position = new Vector2(x,y);
         this.world = world;
         this.define(x, y);
@@ -86,11 +90,11 @@ public class Husk {
 
     public void moveRight(){
         this.state = HuskState.WALKING;
-        b2body.applyLinearImpulse(new Vector2(100f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(50f,0), b2body.getWorldCenter(), true);
     }
     public void moveLeft(){
         this.state = HuskState.WALKING;
-        b2body.applyLinearImpulse(new Vector2(-100f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(-50f,0), b2body.getWorldCenter(), true);
     }
 
     private void define(int x, int y) {
@@ -100,8 +104,8 @@ public class Husk {
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(27);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(15, 27);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
@@ -111,8 +115,8 @@ public class Husk {
         if (currentAnimation!=null){
             currentAnimation.update(dt);
         }
-        this.position.x = b2body.getPosition().x - 49;
-        this.position.y = b2body.getPosition().y - 50;
+        this.position.x = b2body.getPosition().x - 51;
+        this.position.y = b2body.getPosition().y - 51;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }
@@ -134,7 +138,9 @@ public class Husk {
 
         bounds.setPosition(position.x, position.y);
     }
-
+    public int getHealth(){
+        return health;
+    }
     public void dispose() {
     }
 }

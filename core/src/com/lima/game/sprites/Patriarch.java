@@ -8,12 +8,15 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Patriarch {
 
     private PatState state;
     private static final int MOVEMENT = 100;
+    private int health;
+    private int damage;
     private Rectangle bounds;
     private Animation currentAnimation;
 
@@ -54,6 +57,8 @@ public class Patriarch {
     }
 
     public Patriarch(int x, int y, World world){
+        health = 4000;
+        damage = 4;
         position = new Vector2(x,y);
         this.world = world;
         this.define(x, y);
@@ -83,11 +88,11 @@ public class Patriarch {
 
     public void moveRight(){
         this.state = PatState.WALKING;
-        b2body.applyLinearImpulse(new Vector2(100f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(50f,0), b2body.getWorldCenter(), true);
     }
     public void moveLeft(){
         this.state = PatState.WALKING;
-        b2body.applyLinearImpulse(new Vector2(-100f,0), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(-50f,0), b2body.getWorldCenter(), true);
     }
 
     private void define(int x, int y) {
@@ -97,8 +102,8 @@ public class Patriarch {
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(27);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(15, 26);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
@@ -109,8 +114,8 @@ public class Patriarch {
             currentAnimation.update(dt);
         }
 
-        this.position.x = b2body.getPosition().x - 50;
-        this.position.y = b2body.getPosition().y - 52;
+        this.position.x = b2body.getPosition().x - 52;
+        this.position.y = b2body.getPosition().y - 50;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }
@@ -132,7 +137,9 @@ public class Patriarch {
 
         bounds.setPosition(position.x, position.y);
     }
-
+    public int getHealth(){
+        return health;
+    }
     public void dispose() {
     }
 }

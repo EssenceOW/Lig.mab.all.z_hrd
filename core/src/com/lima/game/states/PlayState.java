@@ -116,31 +116,22 @@ public class PlayState extends State {
 
     @Override
     public void handleInput() {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            player.jump();
-        }
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             player.jump();
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.D) && player.getB2body().getLinearVelocity().x <=2) {
+        if(Gdx.input.justTouched() && player.getB2body().getLinearVelocity().x <=2) {
             player.moveRight();
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <=2) {
-            player.moveRight();
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.A) && player.getB2body().getLinearVelocity().x >=-2) {
+        if(Gdx.input.justTouched() && player.getB2body().getLinearVelocity().x >=-2) {
             player.moveLeft();
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >=-2) {
-            player.moveLeft();
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
+        if(Gdx.input.justTouched()) {
             player.attackWithHandgun();
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
+        if(Gdx.input.justTouched()) {
             player.attackWithShotgun();
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.NUM_3)) {
+        if(Gdx.input.justTouched()) {
             player.attackWithLargeGun();
         }
         if(Gdx.input.justTouched()){

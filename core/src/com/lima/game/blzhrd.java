@@ -8,8 +8,8 @@ import com.lima.game.states.GameStateManager;
 import com.lima.game.states.PlayState;
 
 public class blzhrd extends ApplicationAdapter {
-	public static final int WIDTH = 480;
-	public static final int HEIGHT = 800;
+	public static final int WIDTH = 800;
+	public static final int HEIGHT = 480;
 	public static final int PPM = 1;
 
 	public static final String TITLE = "Killing Floor";

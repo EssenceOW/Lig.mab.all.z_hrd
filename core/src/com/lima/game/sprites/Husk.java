@@ -70,12 +70,9 @@ public class Husk {
 //        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
-        huskWalking = new Animation(new TextureRegion(new Texture("Husk_walking.png")),4, 0.5f, false
-        );
-        huskDeath = new Animation(new TextureRegion(new Texture("Husk_death.png")),20, 1f, false
-        );
-        huskAttack = new Animation(new TextureRegion(new Texture("Husk_attack.png")),8, 1f, false
-        );
+        huskWalking = new Animation(new TextureRegion(new Texture("Husk_walking.png")),4, 0.5f, false);
+        huskDeath = new Animation(new TextureRegion(new Texture("Husk_death.png")),20, 1f, false);
+        huskAttack = new Animation(new TextureRegion(new Texture("Husk_attack.png")),8, 1f, false);
     }
 
     public void run(){

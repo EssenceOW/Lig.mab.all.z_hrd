@@ -59,7 +59,6 @@ public class Gorefast {
     }
 
     public Gorefast(int x, int y, World world){
-
         health = 250;
         damage = 18;
         position = new Vector2(x,y);
@@ -75,8 +74,7 @@ public class Gorefast {
         bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
         gorefastAttack = new Animation(new TextureRegion(new Texture("Gorefast_attack.png")),16, 0.6f, false);
-        gorefastRunning = new Animation(new TextureRegion(new Texture("Gorefast_running.png")),4, 0.4f, false
-        );
+        gorefastRunning = new Animation(new TextureRegion(new Texture("Gorefast_running.png")),4, 0.4f, false);
         gorefastDeath = new Animation(new TextureRegion(new Texture("Gorefast_death.png")),20, 1.5f, false);
     }
 

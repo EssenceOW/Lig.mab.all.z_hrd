@@ -75,7 +75,7 @@ public class Gorefast {
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
         gorefastAttack = new Animation(new TextureRegion(new Texture("Gorefast_attack.png")),16, 0.6f, false);
         gorefastRunning = new Animation(new TextureRegion(new Texture("Gorefast_running.png")),4, 0.4f, false);
-        gorefastDeath = new Animation(new TextureRegion(new Texture("Gorefast_death.png")),20, 1.5f, false);
+        gorefastDeath = new Animation(new TextureRegion(new Texture("Gorefast_death.png")),20, 1.3f, false);
     }
 
     public void run(){
@@ -142,10 +142,13 @@ public class Gorefast {
         return health;
     }
     public void takeDamage(int damage){
-        health -= damage;
+        if(state != GoreState.DIE){
+            health -= damage;
+        }
+        if(health < 1){
+            state = GoreState.DIE;
+        }
     }
-
-
     public void dispose() {
     }
 }

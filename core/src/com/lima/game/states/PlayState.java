@@ -20,6 +20,10 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lima.game.blzhrd;
 import com.lima.game.sprites.Bullet;
+import com.lima.game.sprites.Buttons.JumpButton;
+import com.lima.game.sprites.Buttons.LeftButton;
+import com.lima.game.sprites.Buttons.RightButton;
+import com.lima.game.sprites.Buttons.ShootButton;
 import com.lima.game.sprites.Crawler;
 import com.lima.game.sprites.Gorefast;
 import com.lima.game.sprites.Husk;
@@ -33,6 +37,10 @@ import java.util.List;
 public class PlayState extends State {
     private final World world;
     private final Box2DDebugRenderer b2dr;
+    private LeftButton leftButton;
+    private RightButton rightButton;
+    private JumpButton jumpButton;
+    private ShootButton shootButton;
     private Gorefast gorefast;
     private Husk husk;
     private Player player;
@@ -59,6 +67,10 @@ public class PlayState extends State {
         world = new World(new Vector2(0,-110),true);
         b2dr = new Box2DDebugRenderer();
 
+        leftButton = new LeftButton(-30, 10);
+        rightButton = new RightButton(230, 10);
+        jumpButton = new JumpButton(-30, 60);
+        shootButton = new ShootButton(230, 60);
         player = new Player(120, 100, world);
         playerHealth = new BitmapFont();
         patriarch = new Patriarch(40, 300, world);
@@ -116,27 +128,27 @@ public class PlayState extends State {
 
     @Override
     public void handleInput() {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            player.jump();
-        }
-        if(Gdx.input.justTouched() && player.getB2body().getLinearVelocity().x <=2) {
-            player.moveRight();
-        }
-        if(Gdx.input.justTouched() && player.getB2body().getLinearVelocity().x >=-2) {
+//        if(Gdx.input.justTouched()){
+//            player.jump();
+//        }
+//        if(Gdx.input.justTouched() && player.getB2body().getLinearVelocity().x <=2) {
+//            player.moveRight();
+//        }
+        if(Gdx.input.justTouched() && player.getB2body().getLinearVelocity().x >=-2 && leftButton.isPressed()) {
             player.moveLeft();
         }
-        if(Gdx.input.justTouched()) {
-            player.attackWithHandgun();
-        }
-        if(Gdx.input.justTouched()) {
-            player.attackWithShotgun();
-        }
-        if(Gdx.input.justTouched()) {
-            player.attackWithLargeGun();
-        }
-        if(Gdx.input.justTouched()){
-            bullets.add(new Bullet(player.getPosition().x + 33, player.getPosition().y + 7));
-        }
+//        if(Gdx.input.justTouched()) {
+//            player.attackWithHandgun();
+//        }
+//        if(Gdx.input.justTouched()) {
+//            player.attackWithShotgun();
+//        }
+//        if(Gdx.input.justTouched()) {
+//            player.attackWithLargeGun();
+//        }
+//        if(Gdx.input.justTouched()){
+//            bullets.add(new Bullet(player.getPosition().x + 33, player.getPosition().y + 7));
+//        }
     }
 
         @Override
@@ -184,6 +196,10 @@ public class PlayState extends State {
             mapRenderer.render();
             b2dr.render(world, cam.combined);
             tileSB.begin();
+            tileSB.draw(leftButton.getTexture(), leftButton.getPosition().x, leftButton.getPosition().y, 30, 30);
+            tileSB.draw(rightButton.getTexture(), rightButton.getPosition().x, rightButton.getPosition().y, 30, 30);
+            tileSB.draw(jumpButton.getTexture(), jumpButton.getPosition().x, jumpButton.getPosition().y, 30, 30);
+            tileSB.draw(shootButton.getTexture(), shootButton.getPosition().x, shootButton.getPosition().y, 30, 30);
             tileSB.draw(husk.getTexture(), husk.getPosition().x, husk.getPosition().y, 100, 100);
             huskHealth.draw(tileSB, String.valueOf(husk.getHealth()), husk.getPosition().x + 35, husk.getPosition().y + 95);
             tileSB.draw(patriarch.getTexture(), patriarch.getPosition().x, patriarch.getPosition().y, 100, 100);
@@ -210,5 +226,9 @@ public class PlayState extends State {
             player.dispose();
             patriarch.dispose();
             crawler.dispose();
+            leftButton.dispose();
+            rightButton.dispose();
+            jumpButton.dispose();
+            shootButton.dispose();
         }
     }

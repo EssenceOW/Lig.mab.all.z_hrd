@@ -103,7 +103,7 @@ public class Patriarch {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(15, 26);
+        shape.setAsBox(11, 26);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
@@ -114,7 +114,7 @@ public class Patriarch {
             currentAnimation.update(dt);
         }
 
-        this.position.x = b2body.getPosition().x - 52;
+        this.position.x = b2body.getPosition().x - 50;
         this.position.y = b2body.getPosition().y - 50;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
@@ -139,6 +139,9 @@ public class Patriarch {
     }
     public int getHealth(){
         return health;
+    }
+    public void takeDamage(int damage){
+        health -= damage;
     }
     public void dispose() {
     }

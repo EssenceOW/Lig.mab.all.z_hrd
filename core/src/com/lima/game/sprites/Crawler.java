@@ -21,7 +21,7 @@ public class Crawler {
     private Animation currentAnimation;
 
     private Animation crawlerRunning;
-//    private Animation crawlerDeath;
+    private Animation crawlerDeath;
     private Animation crawlerAttack;
     private Texture texture;
     private Vector2 position;
@@ -43,9 +43,9 @@ public class Crawler {
 
     public TextureRegion getTexture() {
         switch(state){
-//            case DIE:
-//                this.currentAnimation = crawlerDeath;
-//                break;
+            case DIE:
+                this.currentAnimation = crawlerDeath;
+                break;
             case CRAWLING:
                 this.currentAnimation = crawlerRunning;
                 break;
@@ -78,7 +78,7 @@ public class Crawler {
 //        flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
         crawlerAttack = new Animation(new TextureRegion(new Texture("Crawler_attack.png")),12, 0.6f, false);
         crawlerRunning = new Animation(new TextureRegion(new Texture("Crawler_crawling.png")),4, 0.4f, false);
-//        crawlerDeath = new Animation(new TextureRegion(new Texture("Crawler_death.png")),20, 1.5f, false);
+        crawlerDeath = new Animation(new TextureRegion(new Texture("Crawler_death.png")),10, 1.5f, false);
     }
 
     public void run(){
@@ -87,9 +87,9 @@ public class Crawler {
     public void attack(){
         this.state = CrawlerState.ATTACKING;
     }
-//    public void die(){
-//        this.state = CrawlerState.DIE;
-//    }
+    public void die(){
+        this.state = CrawlerState.DIE;
+    }
 
     public void moveRight(){
         this.state = CrawlerState.CRAWLING;
@@ -143,6 +143,9 @@ public class Crawler {
     }
     public int getHealth(){
         return health;
+    }
+    public void takeDamage(int damage){
+        health -= damage;
     }
     public void dispose() {
     }

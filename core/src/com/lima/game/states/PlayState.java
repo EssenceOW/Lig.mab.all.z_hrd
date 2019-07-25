@@ -19,17 +19,21 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lima.game.blzhrd;
+import com.lima.game.sprites.Bullet;
 import com.lima.game.sprites.Crawler;
 import com.lima.game.sprites.Gorefast;
 import com.lima.game.sprites.Husk;
 import com.lima.game.sprites.Patriarch;
 import com.lima.game.sprites.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class PlayState extends State {
     private final World world;
     private final Box2DDebugRenderer b2dr;
-    private Gorefast goreFast;
+    private Gorefast gorefast;
     private Husk husk;
     private Player player;
     private Patriarch patriarch;
@@ -44,6 +48,7 @@ public class PlayState extends State {
     private BitmapFont huskHealth;
     private BitmapFont crawlerHealth;
     private BitmapFont patriarchHealth;
+    private List<Bullet> bullets;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -58,12 +63,13 @@ public class PlayState extends State {
         playerHealth = new BitmapFont();
         patriarch = new Patriarch(40, 300, world);
         patriarchHealth = new BitmapFont();
-        goreFast = new Gorefast(120, 300, world);
+        gorefast = new Gorefast(200, 100, world);
         gorefastHealth = new BitmapFont();
         husk = new Husk(200, 300, world);
         huskHealth = new BitmapFont();
-        crawler = new Crawler(200, 100, world);
+        crawler = new Crawler(120, 300, world);
         crawlerHealth = new BitmapFont();
+        bullets = new ArrayList<Bullet>();
         loadGround();
         loadBossGround();
     }
@@ -137,34 +143,8 @@ public class PlayState extends State {
         if(Gdx.input.isKeyPressed(Input.Keys.NUM_3)) {
             player.attackWithLargeGun();
         }
-        if (Gdx.input.justTouched()) {
-            switch (this.currentAction) {
-                case 0:
-//                    goreFast.run();
-//                    husk.run();
-//                    patriarch.run();
-//                    player.run();
-//                    crawler.run();
-                    break;
-                case 1:
-//                    goreFast.attack();
-//                    husk.attack();
-//                    patriarch.attack();
-                    player.attackWithHandgun();
-//                    crawler.attack();
-                    break;
-                case 2:
-//                    goreFast.die();
-//                    husk.die();
-//                    patriarch.die();
-                    player.attackWithLargeGun();
-//                    crawler.die();
-                    break;
-                case 3:
-                    player.attackWithShotgun();
-                    break;
-            }
-            this.currentAction += 1;
+        if(Gdx.input.justTouched()){
+            bullets.add(new Bullet(player.getPosition().x + 33, player.getPosition().y + 7));
         }
     }
 
@@ -175,11 +155,32 @@ public class PlayState extends State {
 
             world.step(1/60f,  6,2);
             cam.position.x = player.getB2body().getPosition().x;
-            goreFast.update(dt);
+            gorefast.update(dt);
             husk.update(dt);
             player.updateSprite(dt);
             patriarch.update(dt);
             crawler.update(dt);
+            for(int i = 0; i < bullets.size(); i++){
+                bullets.get(i).update(dt);
+                if(bullets.get(i).getBounds().overlaps(gorefast.getBounds()) && bullets.get(i).getHit() == false){
+                    bullets.get(i).setHit();
+                    gorefast.takeDamage(player.getDamage());
+                }
+                if(bullets.get(i).getBounds().overlaps(husk.getBounds()) && bullets.get(i).getHit() == false){
+                    bullets.get(i).setHit();
+                    husk.takeDamage(player.getDamage());
+                }
+                if(bullets.get(i).getBounds().overlaps(crawler.getBounds()) && bullets.get(i).getHit() == false){
+                    bullets.get(i).setHit();
+                    crawler.takeDamage(player.getDamage());
+                }
+                if(bullets.get(i).getBounds().overlaps(patriarch.getBounds()) && bullets.get(i).getHit() == false){
+                    bullets.get(i).setHit();
+                    patriarch.takeDamage(player.getDamage());
+                }
+                if(bullets.get(i).getHit()){
+                }
+            }
 
             cam.update();
             mapRenderer.setView(this.cam);
@@ -201,17 +202,19 @@ public class PlayState extends State {
                 tileSB.draw(player.getWeaponTexture(), player.getWeaponPosition().x, player.getWeaponPosition().y, 100, 100);
             }
             playerHealth.draw(tileSB, String.valueOf(player.getHealth()), player.getPosition().x + 35, player.getPosition().y + 95);
-            tileSB.draw(goreFast.getTexture(), goreFast.getPosition().x, goreFast.getPosition().y, 100, 100);
-            gorefastHealth.draw(tileSB, String.valueOf(goreFast.getHealth()), goreFast.getPosition().x + 35, goreFast.getPosition().y + 95);
+            tileSB.draw(gorefast.getTexture(), gorefast.getPosition().x, gorefast.getPosition().y, 100, 100);
+            gorefastHealth.draw(tileSB, String.valueOf(gorefast.getHealth()), gorefast.getPosition().x + 35, gorefast.getPosition().y + 95);
             tileSB.draw(crawler.getTexture(), crawler.getPosition().x + 35, crawler.getPosition().y + 95, 100, 100);
             crawlerHealth.draw(tileSB, String.valueOf(crawler.getHealth()), crawler.getPosition().x + 84, crawler.getPosition().y + 170);
-
+            for(int i = 0; i < bullets.size(); i++){
+                tileSB.draw(bullets.get(i).getTexture(), bullets.get(i).getPosition().x, bullets.get(i).getPosition().y, 100, 100);
+            }
             tileSB.end();
         }
 
         @Override
         public void dispose(){
-            goreFast.dispose();
+            gorefast.dispose();
             husk.dispose();
             player.dispose();
             patriarch.dispose();

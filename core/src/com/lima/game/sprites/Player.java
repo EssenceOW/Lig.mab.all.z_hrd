@@ -163,7 +163,7 @@ public class Player implements Observer {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(15, 27);
+        shape.setAsBox(11, 27);
 
         fdef.shape = shape;
         getB2body().createFixture(fdef);
@@ -211,6 +211,11 @@ public class Player implements Observer {
     public int getHealth(){
         return health;
     }
+    public PlayerState getWeapon(){
+        return state;
+    }
 
-
+    public int getDamage() {
+        return damage;
+    }
 }

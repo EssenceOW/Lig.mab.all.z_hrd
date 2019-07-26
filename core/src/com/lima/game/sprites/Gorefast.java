@@ -115,8 +115,8 @@ public class Gorefast {
         if (currentAnimation!=null){
             currentAnimation.update(dt);
         }
-        this.position.x = b2body.getPosition().x - 50;
-        this.position.y = b2body.getPosition().y - 51;
+        this.position.x = b2body.getPosition().x - 20;
+        this.position.y = b2body.getPosition().y - 30;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }

@@ -28,4 +28,7 @@ public class ShootButton{
             return false;
         }
     }
+    public void setPosition(float x){
+        position.x = x + 150;
+    }
 }

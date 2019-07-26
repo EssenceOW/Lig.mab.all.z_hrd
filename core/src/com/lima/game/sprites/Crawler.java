@@ -118,8 +118,8 @@ public class Crawler {
         if (currentAnimation!=null){
             currentAnimation.update(dt);
         }
-        this.position.x = b2body.getPosition().x - 86;
-        this.position.y = b2body.getPosition().y - 141;
+        this.position.x = b2body.getPosition().x - 63;
+        this.position.y = b2body.getPosition().y - 113;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }

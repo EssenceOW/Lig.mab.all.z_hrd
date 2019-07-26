@@ -67,10 +67,10 @@ public class PlayState extends State {
         world = new World(new Vector2(0,-110),true);
         b2dr = new Box2DDebugRenderer();
 
-        leftButton = new LeftButton(-30, 10);
-        rightButton = new RightButton(230, 10);
-        jumpButton = new JumpButton(-30, 60);
-        shootButton = new ShootButton(230, 60);
+        leftButton = new LeftButton(-50, 10);
+        rightButton = new RightButton(250, 10);
+        jumpButton = new JumpButton(-50, 60);
+        shootButton = new ShootButton(250, 60);
         player = new Player(120, 100, world);
         playerHealth = new BitmapFont();
         patriarch = new Patriarch(40, 300, world);
@@ -128,13 +128,13 @@ public class PlayState extends State {
 
     @Override
     public void handleInput() {
-//        if(Gdx.input.justTouched()){
-//            player.jump();
-//        }
-//        if(Gdx.input.justTouched() && player.getB2body().getLinearVelocity().x <=2) {
-//            player.moveRight();
-//        }
-        if(Gdx.input.justTouched() && player.getB2body().getLinearVelocity().x >=-2 && leftButton.isPressed()) {
+        if(jumpButton.isPressed(Gdx.input.getX(), Gdx.input.getY())){
+            player.jump();
+        }
+        if(rightButton.isPressed() && player.getB2body().getLinearVelocity().x <=2) {
+            player.moveRight();
+        }
+        if(leftButton.isPressed() && player.getB2body().getLinearVelocity().x >=-2) {
             player.moveLeft();
         }
 //        if(Gdx.input.justTouched()) {
@@ -158,6 +158,10 @@ public class PlayState extends State {
 
             world.step(1/60f,  6,2);
             cam.position.x = player.getB2body().getPosition().x;
+            jumpButton.setPosition(cam.position.x);
+            leftButton.setPosition(cam.position.x);
+            shootButton.setPosition(cam.position.x);
+            rightButton.setPosition(cam.position.x);
             gorefast.update(dt);
             husk.update(dt);
             player.updateSprite(dt);
@@ -198,23 +202,24 @@ public class PlayState extends State {
             tileSB.begin();
             tileSB.draw(leftButton.getTexture(), leftButton.getPosition().x, leftButton.getPosition().y, 30, 30);
             tileSB.draw(rightButton.getTexture(), rightButton.getPosition().x, rightButton.getPosition().y, 30, 30);
+            jumpButton.setresize(30, 30);
             tileSB.draw(jumpButton.getTexture(), jumpButton.getPosition().x, jumpButton.getPosition().y, 30, 30);
             tileSB.draw(shootButton.getTexture(), shootButton.getPosition().x, shootButton.getPosition().y, 30, 30);
-            tileSB.draw(husk.getTexture(), husk.getPosition().x, husk.getPosition().y, 100, 100);
-            huskHealth.draw(tileSB, String.valueOf(husk.getHealth()), husk.getPosition().x + 35, husk.getPosition().y + 95);
-            tileSB.draw(patriarch.getTexture(), patriarch.getPosition().x, patriarch.getPosition().y, 100, 100);
-            patriarchHealth.draw(tileSB, String.valueOf(patriarch.getHealth()), patriarch.getPosition().x + 35, patriarch.getPosition().y + 95);
-            tileSB.draw(player.getTexture(), player.getPosition().x, player.getPosition().y,100, 100);
+            tileSB.draw(husk.getTexture(), husk.getPosition().x, husk.getPosition().y, 80/2.5f, 143/2.5f);
+            huskHealth.draw(tileSB, String.valueOf(husk.getHealth()), husk.getPosition().x + 3, husk.getPosition().y + 75);
+            tileSB.draw(patriarch.getTexture(), patriarch.getPosition().x, patriarch.getPosition().y, 87/2.5f, 139/2.5f);
+            patriarchHealth.draw(tileSB, String.valueOf(patriarch.getHealth()), patriarch.getPosition().x + 3, patriarch.getPosition().y + 75);
+            tileSB.draw(player.getTexture(), player.getPosition().x, player.getPosition().y,81/2.5f, 144/2.5f);
             if(player.getWeaponTexture() != null){
                 tileSB.draw(player.getWeaponTexture(), player.getWeaponPosition().x, player.getWeaponPosition().y, 100, 100);
             }
-            playerHealth.draw(tileSB, String.valueOf(player.getHealth()), player.getPosition().x + 35, player.getPosition().y + 95);
-            tileSB.draw(gorefast.getTexture(), gorefast.getPosition().x, gorefast.getPosition().y, 100, 100);
-            gorefastHealth.draw(tileSB, String.valueOf(gorefast.getHealth()), gorefast.getPosition().x + 35, gorefast.getPosition().y + 95);
-            tileSB.draw(crawler.getTexture(), crawler.getPosition().x + 35, crawler.getPosition().y + 95, 100, 100);
-            crawlerHealth.draw(tileSB, String.valueOf(crawler.getHealth()), crawler.getPosition().x + 84, crawler.getPosition().y + 170);
+            playerHealth.draw(tileSB, String.valueOf(player.getHealth()), player.getPosition().x + 3, player.getPosition().y + 75);
+            tileSB.draw(gorefast.getTexture(), gorefast.getPosition().x, gorefast.getPosition().y, 83/2.5f, 136/2.5f);
+            gorefastHealth.draw(tileSB, String.valueOf(gorefast.getHealth()), gorefast.getPosition().x + 3, gorefast.getPosition().y + 75);
+            tileSB.draw(crawler.getTexture(), crawler.getPosition().x + 35, crawler.getPosition().y + 95, 149/2.5f, 85/2.5f);
+            crawlerHealth.draw(tileSB, String.valueOf(crawler.getHealth()), crawler.getPosition().x + 5, crawler.getPosition().y + 170);
             for(int i = 0; i < bullets.size(); i++){
-                tileSB.draw(bullets.get(i).getTexture(), bullets.get(i).getPosition().x, bullets.get(i).getPosition().y, 100, 100);
+                tileSB.draw(bullets.get(i).getTexture(), bullets.get(i).getPosition().x, bullets.get(i).getPosition().y, 30, 30);
             }
             tileSB.end();
         }

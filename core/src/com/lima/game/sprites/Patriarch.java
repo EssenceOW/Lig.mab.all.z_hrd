@@ -114,8 +114,8 @@ public class Patriarch {
             currentAnimation.update(dt);
         }
 
-        this.position.x = b2body.getPosition().x - 50;
-        this.position.y = b2body.getPosition().y - 50;
+        this.position.x = b2body.getPosition().x - 15;
+        this.position.y = b2body.getPosition().y - 30;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }

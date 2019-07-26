@@ -22,10 +22,13 @@ public class LeftButton{
         texture.dispose();
     }
     public boolean isPressed(){
-        if(Gdx.input.getX() >= this.position.x || Gdx.input.getX() < this.position.x + texture.getWidth() && Gdx.input.getY() >= this.position.y || Gdx.input.getY() < this.position.y + texture.getHeight()) {
+        if(Gdx.input.getX() >= this.position.x && Gdx.input.getX() < this.position.x + texture.getWidth() && Gdx.input.getY() >= this.position.y && Gdx.input.getY() < this.position.y + texture.getHeight()) {
             return true;
         } else {
             return false;
         }
+    }
+    public void setPosition(float x){
+        position.x = x - 170;
     }
 }

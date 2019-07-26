@@ -173,8 +173,8 @@ public class Player implements Observer {
         if (currentAnimation!=null){
             currentAnimation.update(dt);
         }
-        this.position.x = getB2body().getPosition().x - 48;
-        this.position.y = getB2body().getPosition().y - 54;
+        this.position.x = getB2body().getPosition().x - 15;
+        this.position.y = getB2body().getPosition().y - 30;
 //        if (position.y > 0) {
 //            velocity.add(0, GRAVITY);
 //        }
